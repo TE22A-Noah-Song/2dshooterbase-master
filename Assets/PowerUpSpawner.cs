@@ -11,7 +11,7 @@ public class PowerUpSpawner : MonoBehaviour
     GameObject Spawner;
 
      [SerializeField]
-    float CooldownBetween = 0.2f;
+    float CooldownBetween = 1f;
     float CooldownBetweenLast = 0;
     // Start is called before the first frame update
     void Start()
