@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -30,6 +32,21 @@ int healthCurrent;
 
 [SerializeField]
 Slider healthBar;
+
+//PowerUps
+
+[SerializeField]
+float PowerUpSpeed=speed++;
+
+[SerializeField]
+float PowerUpFireRate=
+
+[SerializeField]
+float PowerUpHeal=healthMax;
+
+[SerializeField]
+float PowerUpMaxHealth=
+
 void Start()
 {
     speaker=GetComponent<AudioSource>();
@@ -91,6 +108,17 @@ void Start()
             Destroy(this.gameObject);
 
             SceneManager.LoadScene(2);
+        }
+        }
+
+
+
+
+        void OnTriggerEnter2D(Collider2D other)
+        {
+        if(other.gameObject.tag=="PowerUp")
+        {
+        
         }
         }
     }   
