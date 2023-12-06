@@ -16,50 +16,52 @@ public class ShipController : MonoBehaviour
 
     [SerializeField]
     GameObject gun;
-    
+
     [SerializeField]
     float timeBetweenShots = 0.5f;
     float timeSinceLastShot = 0;
 
-[SerializeField]
-GameObject explosionPrefab;
+    [SerializeField]
+    GameObject explosionPrefab;
 
-AudioSource speaker;
+    AudioSource speaker;
 
-[SerializeField]
-int healthMax=3;
-int healthCurrent;
+    [SerializeField]
+    int healthMax = 3;
+    int healthCurrent;
 
-[SerializeField]
-Slider healthBar;
+    [SerializeField]
+    Slider healthBar;
 
-//PowerUps
+    //PowerUps
+    [SerializeField]
+    float PowerUpSpeed = 7f;
 
-[SerializeField]
-float PowerUpSpeed=speed++;
+    [SerializeField]
+    float PowerUpFireRate = 0.2f;
 
-[SerializeField]
-float PowerUpFireRate=
+    [SerializeField]
+    float PowerUpHeal = 3;
 
-[SerializeField]
-float PowerUpHeal=healthMax;
+    [SerializeField]
+    float PowerUpMaxHealth = 5;
 
-[SerializeField]
-float PowerUpMaxHealth=
+    void Start()
+    {
+        speaker = GetComponent<AudioSource>();
+        healthCurrent = healthMax;
+        healthBar.maxValue = healthMax;
+        healthBar.value = healthCurrent;
 
-void Start()
-{
-    speaker=GetComponent<AudioSource>();
-    healthCurrent=healthMax;
-    healthBar.maxValue=healthMax;
-    healthBar.value=healthCurrent;
-}
-   
+
+
+    }
+
     // Update is called once per frame
     void Update()
     // kod till styrning
     {
-        
+
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
 
@@ -69,19 +71,19 @@ void Start()
         Vector2 movement = movementX + movementY;
 
         transform.Translate(movement * speed * Time.deltaTime);
-        
+
         if (Mathf.Abs(transform.position.x) > 9.7f)
         {
             transform.Translate(-movementX * speed * Time.deltaTime);
         }
-        
+
         if (Mathf.Abs(transform.position.y) > 4f)
         {
             transform.Translate(-movementY * speed * Time.deltaTime);
         }
-        
+
         // Skjut kod under
-        
+
         timeSinceLastShot += Time.deltaTime;
 
 
@@ -92,36 +94,57 @@ void Start()
         }
 
 
-            
-        
+
+
     }
-        void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag == "Enemy")
         {
             Instantiate(explosionPrefab, transform.position, Quaternion.identity);
-           
-        healthCurrent--;
-        healthBar.value = healthCurrent;
-        if (healthCurrent == 0)
+
+            healthCurrent--;
+            healthBar.value = healthCurrent;
+            if (healthCurrent == 0)
+            {
+                Destroy(this.gameObject);
+
+                SceneManager.LoadScene(2);
+            }
+        }
+        else if (other.gameObject.tag == "PowerUp")
         {
-            Destroy(this.gameObject);
+            float[] PowerAbilities = { PowerUpSpeed, PowerUpFireRate, PowerUpHeal, PowerUpMaxHealth };
+            int randomIndex = Random.Range(0, PowerAbilities.Length);
+            float randomElement = PowerAbilities[randomIndex];
+            Debug.Log("random siffra" + randomElement);
 
-            SceneManager.LoadScene(2);
+            if (Mathf.Approximately(randomElement, 7f))
+            {
+                speed = 11f;
+            }
+
+            else if (Mathf.Approximately(randomElement, 0.2f))
+            {
+                timeBetweenShots = 0.2f;
+            }
+
+            else if (Mathf.Approximately(randomElement, 3))
+            {
+                healthCurrent = healthMax;
+            }
+
+            else if (Mathf.Approximately(randomElement, 5))
+            {
+                healthMax = 5;
+            }
+
+
+
         }
-        }
 
 
-
-
-        void OnTriggerEnter2D(Collider2D other)
-        {
-        if(other.gameObject.tag=="PowerUp")
-        {
-        
-        }
-        }
-    }   
+    }
 }
 
 
