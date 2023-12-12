@@ -46,6 +46,8 @@ public class ShipController : MonoBehaviour
     [SerializeField]
     float PowerUpMaxHealth = 5;
 
+    int previousIndex = -1;
+
     void Start()
     {
         speaker = GetComponent<AudioSource>();
@@ -116,8 +118,13 @@ public class ShipController : MonoBehaviour
         {
             float[] PowerAbilities = { PowerUpSpeed, PowerUpFireRate, PowerUpHeal, PowerUpMaxHealth };
             int randomIndex = Random.Range(0, PowerAbilities.Length);
+            while (randomIndex == previousIndex)
+        {
+            randomIndex = Random.Range(0, PowerAbilities.Length);
+        }
             float randomElement = PowerAbilities[randomIndex];
             Debug.Log("random siffra" + randomElement);
+            previousIndex = randomIndex;
 
             if (Mathf.Approximately(randomElement, 7f))
             {
@@ -129,20 +136,28 @@ public class ShipController : MonoBehaviour
                 timeBetweenShots = 0.2f;
             }
 
-            else if (Mathf.Approximately(randomElement, 3))
-            {
-                healthCurrent = healthMax;
-            }
-
             else if (Mathf.Approximately(randomElement, 5))
             {
                 healthMax = 5;
+                healthBar.maxValue = healthMax;
+                
+                
+                
             }
+
+            else if (Mathf.Approximately(randomElement, 3))
+            {
+                healthCurrent = healthMax;
+                healthBar.value = healthCurrent;
+            }
+
+           
 
 
 
         }
-
+    
+    
 
     }
 }
